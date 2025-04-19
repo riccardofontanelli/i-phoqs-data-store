@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from app.models import Base, Strumento
 from fastapi.middleware.cors import CORSMiddleware
 
-DATABASE_URL = "postgresql://postgres:postgres@db-postgres:5432/registrydb"
+DATABASE_URL = "postgresql://registrydb_vf8t_user:NS7Rrp3FdjoUHuPNBKdYxXKTi10G6tXj@dpg-d0156gq4d50c73cs9e20-a.frankfurt-postgres.render.com/registrydb_vf8t"
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
@@ -37,3 +37,7 @@ def add_strumento(payload: dict):
     db.refresh(nuovo)
     db.close()
     return {"status": "aggiunto"}
+
+@app.get("/")
+def read_root():
+    return {"message": "Data Store online!"}
