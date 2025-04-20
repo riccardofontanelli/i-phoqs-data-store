@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.models import Base, Strumento
@@ -41,3 +41,15 @@ def add_strumento(payload: dict):
 @app.get("/")
 def read_root():
     return {"message": "Data Store online!"}
+
+@app.delete("/strumenti/{id}")
+def delete_strumento(id: int):
+    db = SessionLocal()
+    strumento = db.query(Strumento).filter(Strumento.id == id).first()
+    if not strumento:
+        db.close()
+        raise HTTPException(status_code=404, detail="Strumento non trovato")
+    db.delete(strumento)
+    db.commit()
+    db.close()
+    return {"status": "eliminato"}
